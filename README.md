@@ -6,7 +6,7 @@
 
 ### web.clj
 
-Read custom headers on request 
+Read custom headers on requests 
 
 ~~~ clojure
 
@@ -15,7 +15,7 @@ Read custom headers on request
 
 ~~~
 
-unit test web.clj with headers
+Unit test web.clj mock requests with headers
 
 ~~~ clojure
 
