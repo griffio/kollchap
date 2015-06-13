@@ -14,7 +14,7 @@
    Accepts method, resource and optionally an extended map"
   [method resource & [{:keys [params body content-type headers]
                        :or {params {}
-                            headers {"x-greet" "Bobert"}}}]]
+                            headers {"x-name" "Bobert"}}}]]
   (let [{:keys [body] :as res}
         (app (merge {:request-method method
                      :uri resource

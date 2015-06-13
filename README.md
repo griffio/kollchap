@@ -11,7 +11,7 @@ Read custom headers on requests
 ~~~ clojure
 
  (GET "/" req
-        [] (greet (get-in req [:headers "x-greet"])))
+        [] (greet (get-in req [:headers "x-name"])))
 
 ~~~
 
@@ -24,7 +24,7 @@ Unit test web.clj mock requests with headers
      Accepts method, resource and optionally an extended map with headers"
        [method resource & [{:keys [params body content-type headers]
                               :or {params {}
-                                   headers {"x-greet" "Bobert"}}}]]
+                                   headers {"x-name" "Bobert"}}}]]
 
 
 ~~~

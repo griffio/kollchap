@@ -28,10 +28,10 @@
      :status (if (:success body) 200 500)
      :body body}))
 
-(defn greet
-  "returns greeting"
-  [hello]
-  {:status 200 :body (format "Hello %s!\n" hello )})
+(defn hello
+  "returns the greeting"
+  [xname]
+  {:status 200 :body (format "Hello %s!\n" xname)})
 
 (defroutes routes
 
@@ -39,7 +39,7 @@
        [] (healthcheck))
 
   (GET "/" req
-       [] (greet (get-in req [:headers "x-greet"])))
+       [] (hello (get-in req [:headers "x-name"])))
 
   (route/not-found (error-response "Resource not found" 404)))
 
