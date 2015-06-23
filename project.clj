@@ -8,5 +8,6 @@
   :uberwar-name "kollchap.war"
   :profiles {:uberjar {:resource-paths ["swagger-ui"]
                        :aot :all}
-             :dev {:dependencies [[javax.servlet/servlet-api "2.5"]]
+             :dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+                                  [midje "1.6.3"]]
                    :plugins [[lein-ring "0.9.4"]]}})

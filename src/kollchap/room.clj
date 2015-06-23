@@ -1,12 +1,9 @@
-(ns kollchap.domain
+(ns kollchap.room
   (:require [schema.core :as s]
             [ring.swagger.schema :refer [coerce!]]))
 
 ;; Domain
 
-(s/defschema Player {:id Long
-                     :name String
-                     :background String})
 
 (s/defschema Room {:id Long
                    :name String
@@ -15,11 +12,7 @@
 ;; Repository
 
 (defonce id-seq (atom 0))
-(defonce characters (atom (array-map)))
 (defonce rooms (atom (array-map)))
-
-(defn get-character [id] (@characters id))
-(defn get-characters [] (-> characters deref vals reverse))
 
 (defn get-room [id] (@rooms id))
 (defn get-rooms [] (-> rooms deref vals reverse))

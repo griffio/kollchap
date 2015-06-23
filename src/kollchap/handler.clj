@@ -1,7 +1,9 @@
 (ns kollchap.handler
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
-            [kollchap.domain :refer :all]
+            [kollchap.character :as c]
+            [kollchap.monster :as m]
+            [kollchap.room :as r]
             [schema.core :as s]))
 
 (defapi app
@@ -15,13 +17,13 @@
     :tags ["kollchap"]
 
     (GET* "/characters/:id" []
-      :return Player 
+      :return c/GameCharacter 
       :path-params [id :- Long]
       :summary "id path-parameter"
-      (ok get-character id))
+      (ok (c/get-character id)))
 
     (GET* "/rooms/:id" []
-      :return Room
+      :return r/Room
       :path-params [id :- Long]
       :summary "id with path-parameters"
-      (ok (get-room id)))))
+      (ok (r/get-room id)))))
