@@ -1,34 +1,26 @@
-## Kollchap
+# Compojure-api-examples
 
-### clojure ring compojure
+Example project for using [Compojure-api](https://github.com/metosin/compojure-api).
 
-### Project template created from [mr-clojure](https://github.com/mixradio/mr-clojure)
+## Usage
 
-### web.clj
+### Running
 
-Read custom headers on requests 
+`lein ring server`
 
-~~~ clojure
+### Packaging and running as standalone jar
 
- (GET "/" req
-        [] (greet (get-in req [:headers "x-name"])))
+```
+lein do clean, ring uberjar
+java -jar target/examples.jar
+```
 
-~~~
+### Packaging as war
 
-Unit test web.clj mock requests with headers
+`lein ring uberwar`
 
-~~~ clojure
+## License
 
-(defn request
-  "Creates a compojure request map and applies it to our routes.
-     Accepts method, resource and optionally an extended map with headers"
-       [method resource & [{:keys [params body content-type headers]
-                              :or {params {}
-                                   headers {"x-name" "Bobert"}}}]]
+Copyright © 2014-2015 [Metosin Oy](http://www.metosin.fi)
 
-
-~~~
-
-
-
-
+Distributed under the Eclipse Public License, the same as Clojure.
