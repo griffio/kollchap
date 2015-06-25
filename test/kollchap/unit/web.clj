@@ -34,4 +34,6 @@
  :unit
 
 (fact "returns a player character" 
-      (:body (request :get "/characters/1")) => "")
+      (let [resp (request :get "/kollchap/characters/1")]
+        (:status resp) => 200
+        (get-in resp [:body :name]) => "Slammer Kyntire")))

@@ -13,7 +13,7 @@
             :description "Shrine of Kollchap - taken from the book What is Dungeons and Dragons?"}
      :tags [{:name "kollchap", :description "kollchap api "}]})
 
-  (context* "/" []
+  (context* "/kollchap" []
     :tags ["kollchap"]
 
     (GET* "/characters/:id" []
