@@ -4,5 +4,4 @@
 
 (s/defschema Link {:href s/Str})
 
-(s/defschema Resource {:_links
-                       {:self Link}})
+(s/defschema Resource {:self Link})

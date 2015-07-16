@@ -3,6 +3,7 @@
             [ring.util.http-response :refer :all]
             [kollchap.character :as c]
             [kollchap.monster :as m]
+            [kollchap.resources :as rs]
             [kollchap.room :as r]
             [schema.core :as s]))
 
@@ -17,13 +18,13 @@
     :tags ["kollchap"]
 
     (GET* "/characters/:id" []
-      :return c/GameCharacter 
+      :return rs/CharacterResource 
       :path-params [id :- Long]
       :summary "id path-parameter"
-      (ok (c/get-character id)))
+      (ok {:character (c/get-character id) :_links {:self {:href (str "/characters/" id)}}})))
 
     (GET* "/rooms/:id" []
       :return r/Room
       :path-params [id :- Long]
       :summary "id with path-parameters"
-      (ok (r/get-room id)))))
+      (ok (r/get-room id))))
