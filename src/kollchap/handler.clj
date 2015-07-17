@@ -7,6 +7,12 @@
             [kollchap.room :as r]
             [schema.core :as s]))
 
+(defn middleware-add-self-link [handler]
+  (fn add-base-link [{:keys [scheme server-name server-port uri] :as r}]
+    (let [link (str (name scheme) "://" server-name ":" server-port uri)]
+      (handler (assoc r :self-link link)))))
+
+
 (defapi app
   (swagger-ui)
   (swagger-docs
@@ -17,14 +23,18 @@
   (context* "/kollchap" []
     :tags ["kollchap"]
 
-    (GET* "/characters/:id" []
+    (GET* "/characters/:id" {:as req} 
       :return rs/CharacterResource 
       :path-params [id :- Long]
-      :summary "id path-parameter"
-      (ok {:character (c/get-character id) :_links {:self {:href (str "/characters/" id)}}})))
+      :summary "character id path-parameter"
+      :middlewares [middleware-add-self-link]
+      (ok {:character (c/get-character id)
+           :_links {:self {:href (-> req :self-link)}}})))
 
-    (GET* "/rooms/:id" []
-      :return r/Room
+    (GET* "/rooms/:id" {:as req}
+      :return rs/RoomResource
       :path-params [id :- Long]
-      :summary "id with path-parameters"
-      (ok (r/get-room id))))
+      :summary "room id path-parameter"
+      :middlewares [middleware-add-self-link]
+      (ok {:room (r/get-room id)
+           :_links {:self {:href (-> req :self-link)}}})))

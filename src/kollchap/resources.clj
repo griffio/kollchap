@@ -7,6 +7,7 @@
 
 (s/defschema CharacterResource {:character c/GameCharacter 
                                 :_links l/Resource})
+(s/defschema RoomResource {:room r/Room
+                           :_links l/Resource})
 
-(defn character-resource [game-character](game-character))
 
