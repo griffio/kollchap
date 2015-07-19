@@ -20,6 +20,9 @@
          (app (merge {:request-method method
                       :uri resource
                       :params params
+                      :scheme "http"
+                      :server-name "localhost"
+                      :server-port "8080"
                       :headers headers}
                     (when body {:body (-> body json/generate-string .getBytes ByteArrayInputStream.)})
                     (when content-type {:content-type content-type})))]
@@ -30,10 +33,21 @@
     (json-response? res)
     (update-in [:body] #(json/parse-string % true)))))
 
+(defn to-json [s] (json/generate-string s))
+
+(def lizard-man-fixture {:id 0 :name "Lizard Man"})
+
 (fact-group
  :unit
 
 (fact "returns a player character" 
       (let [resp (request :get "/kollchap/characters/1")]
         (:status resp) => 200
-        (get-in resp [:body :name]) => "Slammer Kyntire")))
+        (get-in resp [:body :character]) => (c/get-character 1)))
+
+(fact "create a player character"
+      (let [resp (request :post "/kollchap/characters"
+                          :content-type "application/json" 
+                          (to-json lizard-man-fixture))]
+        (:status resp) => 200
+        (get-in resp [:body :character]) => lizard-man-fixture)))

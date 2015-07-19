@@ -12,7 +12,6 @@
     (let [link (str (name scheme) "://" server-name ":" server-port uri)]
       (handler (assoc r :self-link link)))))
 
-
 (defapi app
   (swagger-ui)
   (swagger-docs
@@ -29,7 +28,14 @@
       :summary "character id path-parameter"
       :middlewares [middleware-add-self-link]
       (ok {:character (c/get-character id)
-           :_links {:self {:href (-> req :self-link)}}})))
+           :_links {:self {:href (-> req :self-link)}}}))
+
+    (POST* "/characters" {:as req}
+      :body [character c/GameCharacter]
+      :return rs/CharacterResource
+      :summary "create new character resource from body"
+      (ok {:character (c/add! character)
+           :_links {:self {:href ""}}}))
 
     (GET* "/rooms/:id" {:as req}
       :return rs/RoomResource
@@ -37,4 +43,4 @@
       :summary "room id path-parameter"
       :middlewares [middleware-add-self-link]
       (ok {:room (r/get-room id)
-           :_links {:self {:href (-> req :self-link)}}})))
+           :_links {:self {:href (-> req :self-link)}}}))))
