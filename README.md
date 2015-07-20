@@ -1,6 +1,10 @@
 # Compojure-api-examples
 
+## Kollchap example
+
 Example project for using [Compojure-api](https://github.com/metosin/compojure-api).
+
+Aiming to make it Restful hypermedia with resource links
 
 ## Usage
 
