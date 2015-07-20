@@ -2,7 +2,10 @@
   :description "Shrine of Kollchap api - taken from the book What is Dungeons & Dragons?"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [clj-time "0.9.0"] ;; needed as `lein ring` is broken.
-                 [metosin/compojure-api "0.21.0"]]
+                 [metosin/compojure-api "0.21.0"]
+                 [org.clojure/tools.logging "0.3.1"]
+                 [ch.qos.logback/logback-classic "1.1.3"]]
+  
   :ring {:handler kollchap.handler/app}
   :uberjar-name "kollchap.jar"
   :uberwar-name "kollchap.war"

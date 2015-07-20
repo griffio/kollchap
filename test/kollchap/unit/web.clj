@@ -13,9 +13,9 @@
 (defn request
    "Creates a compojure request map and applies it to our routes.
     Accepts method, resource and optionally an extended map"
-   [method resource & [{:keys [params body content-type headers]
-                        :or {param {}
-                             headers {}}}]]
+   [method resource & {:keys [params body content-type headers]
+                       :or {param {}
+                            headers {}}}]
    (let [{:keys [body] :as res}
          (app (merge {:request-method method
                       :uri resource
@@ -34,8 +34,8 @@
     (update-in [:body] #(json/parse-string % true)))))
 
 (defn to-json [s] (json/generate-string s))
-
-(def lizard-man-fixture {:id 0 :name "Lizard Man"})
+;;http --json POST localhost:3000/kollchap/characters id:=0 name='Lizard Man' background='Sitting on a rock...'
+(def lizard-man-fixture {:id 4 :name "Lizard Man" :background "Sitting on a rock..."})
 
 (fact-group
  :unit
@@ -45,9 +45,10 @@
         (:status resp) => 200
         (get-in resp [:body :character]) => (c/get-character 1)))
 
-(fact "create a player character"
-      (let [resp (request :post "/kollchap/characters"
+(fact "create a game character"
+      (let [resp (request :post "/kollchap/characters" 
                           :content-type "application/json" 
-                          (to-json lizard-man-fixture))]
+                          :headers {"Content-type" "application/json"}
+                          :body lizard-man-fixture)]
         (:status resp) => 200
         (get-in resp [:body :character]) => lizard-man-fixture)))
