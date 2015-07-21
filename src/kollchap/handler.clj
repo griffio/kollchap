@@ -34,7 +34,7 @@
       :body [character c/GameCharacter]
       :return rs/CharacterResource
       :summary "create new character resource from body"
-      (ok {:character (c/add! character)
+      (created {:character (c/add! character)
            :_links {:self {:href ""}}}))
 
     (GET* "/rooms/:id" {:as req}
@@ -43,4 +43,11 @@
       :summary "room id path-parameter"
       :middlewares [middleware-add-self-link]
       (ok {:room (r/get-room id)
-           :_links {:self {:href (-> req :self-link)}}}))))
+           :_links {:self {:href (-> req :self-link)}}}))
+
+    (POST* "/rooms" {:as req}
+      :body [room r/Room]
+      :return rs/RoomResource
+      :summary "create new room resource from body"
+      (created {:room (r/add! room)
+                :_links {:self {:href ""}}}))))
