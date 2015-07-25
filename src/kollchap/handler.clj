@@ -51,22 +51,12 @@
                         :middlewares [middleware-add-self-link]
                         (let [location-room (l/get-character-location id)]
                           (ok {:room   location-room
-                               :_links {:self {:href (str (req :base-link) "/rooms/" (location-room :id))}}})))
+                               :_links {:self {:href (str (req :base-link) "/rooms/" (location-room :key))}}})))
 
-                  (GET* "/rooms/:id" {:as req}
+                  (GET* "/rooms/:key" {:as req}
                         :return rs/RoomResource
-                        :path-params [id :- Long]
-                        :summary "room id path-parameter"
+                        :path-params [key :- String]
+                        :summary "room key path-parameter"
                         :middlewares [middleware-add-self-link]
-                        (ok {:room   (r/get-room id)
-                             :_links {:self {:href (str (req :self-link))}}}))
-
-                  (POST* "/rooms" {:as req}
-                         :body [room r/Room]
-                         :return rs/RoomResource
-                         :summary "create new room resource from body"
-                         :middlewares [middleware-add-self-link]
-                         (let [new-room (r/add! room)
-                               new-resource-id (entity-to-resource (req :self-link) new-room)]
-                           (created {:room   new-room
-                                     :_links {:self {:href new-resource-id}}})))))
+                        (ok {:room   (r/get-room key)
+                             :_links {:self {:href (str (req :self-link))}}}))))

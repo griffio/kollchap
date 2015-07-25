@@ -35,10 +35,8 @@
             (update-in [:body] #(json/parse-string % true)))))
 
 (defn to-json [s] (json/generate-string s))
-;;http --json POST localhost:3000/kollchap/characters id:=0 name='Lizard Man' background='Sitting on a rock...'
-(def lizard-man-fixture {:id 4 :name "Lizard Man" :background "Sitting on a rock..." :room-id 23})
-;;http --json POST localhost:3000/kollchap/rooms id:=0 name='Meditation Room' :description='This room was ...'
-(def another-room-fixture {:id 0 :name "Another Room" :description "This room was ..."})
+;;http --json POST localhost:3000/kollchap/characters id:=0 name='Wealthy Merchant' background='Locked in cells...'
+(def test-player-fixture {:id 0 :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
 
 (fact-group
   :unit
@@ -51,25 +49,16 @@
   (fact "create a game character"
         (let [resp (request :post "/kollchap/characters"
                             :content-type "application/json"
-                            :body lizard-man-fixture)]
+                            :body test-player-fixture)]
           (:status resp) => 201
-          (get-in resp [:body :character :name]) => (lizard-man-fixture :name)))
+          (get-in resp [:body :character :name]) => (test-player-fixture :name)))
 
-  (fact "returns a character room location"
-        (let [resp (request :get "/kollchap/characters/4/room")]
+  (fact "returns a character's location"
+        (let [resp (request :get "/kollchap/characters/6/room")]
           (:status resp) => 200
-          (get-in resp [:body :room]) => (r/get-room 5)))
+          (get-in resp [:body :room]) => (r/get-room "12")))
 
-  (fact "returns a room"
+  (fact "returns a room by key"
         (let [resp (request :get "/kollchap/rooms/1")]
           (:status resp) => 200
-          (get-in resp [:body :room]) => (r/get-room 1)))
-
-  (fact "create a room"
-        (let [resp (request :post "/kollchap/rooms"
-                            :content-type "application/json"
-                            :body another-room-fixture)]
-          (:status resp) => 201
-          (get-in resp [:body :room :name]) => (another-room-fixture :name))))
-                                      
-
+          (get-in resp [:body :room]) => (r/get-room "1"))))
