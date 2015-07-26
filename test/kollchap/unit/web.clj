@@ -1,7 +1,8 @@
 (ns kollchap.unit.web
   (:require [kollchap.handler :refer :all]
-            [kollchap.character :as c]
-            [kollchap.room :as r]
+            [kollchap.character :as cr]
+            [kollchap.room :as rm]
+            [kollchap.location :as ln]
             [cheshire.core :as json]
             [midje.sweet :refer :all])
   (:import [java.io ByteArrayInputStream InputStream]))
@@ -37,6 +38,7 @@
 (defn to-json [s] (json/generate-string s))
 ;;http --json POST localhost:3000/kollchap/characters id:=0 name='Wealthy Merchant' background='Locked in cells...'
 (def test-player-fixture {:id 0 :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
+(def test-location-fixture {:room-key "9a"})
 
 (fact-group
   :unit
@@ -44,7 +46,7 @@
   (fact "returns a player character"
         (let [resp (request :get "/kollchap/characters/1")]
           (:status resp) => 200
-          (get-in resp [:body :character]) => (c/get-character 1)))
+          (get-in resp [:body :character]) => (cr/get-character 1)))
 
   (fact "create a game character"
         (let [resp (request :post "/kollchap/characters"
@@ -54,16 +56,18 @@
           (get-in resp [:body :character :name]) => (test-player-fixture :name)))
 
   (fact "returns a character's location"
-        (let [resp (request :get "/kollchap/characters/6/room")]
+        (let [resp (request :get "/kollchap/characters/6/location")]
           (:status resp) => 200
-          (get-in resp [:body :room]) => (r/get-room "12")))
+          (get-in resp [:body :location]) => (ln/get-character-location 6)))
 
   (fact "returns a room by key"
         (let [resp (request :get "/kollchap/rooms/1")]
           (:status resp) => 200
-          (get-in resp [:body :room]) => (r/get-room "1")))
+          (get-in resp [:body :room]) => (rm/get-room "1")))
 
   (fact "update character location"
-        (let [resp (request :put "/kollchap/characters/1/room")]
-          (:status resp) => 204))
+        (let [resp (request :put "/kollchap/characters/1/location"
+                            :content-type "application/json"
+                            :body test-location-fixture)]
+          (:status resp) => 200))
   )

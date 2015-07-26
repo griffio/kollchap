@@ -1,13 +1,15 @@
 (ns kollchap.resources
   (:require [schema.core :as s]
-            [kollchap.character :as c]
-            [kollchap.monster :as m]
-            [kollchap.room :as r]
-            [kollchap.link :as l]))
+            [kollchap.character :as cr]
+            [kollchap.room :as rm]
+            [kollchap.link :as lk]
+            [kollchap.location :as ln]))
 
-(s/defschema CharacterResource {:character c/GameCharacter 
-                                :_links l/Resource})
-(s/defschema RoomResource {:room r/Room
-                           :_links l/Resource})
+(s/defschema CharacterResource {:character cr/GameCharacter
+                                :_links    lk/Resource})
 
+(s/defschema RoomResource {:room   rm/Room
+                           :_links lk/Resource})
 
+(s/defschema LocationResource {:location ln/Location
+                               :_links   lk/Resource})

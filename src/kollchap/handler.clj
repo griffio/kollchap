@@ -1,11 +1,11 @@
 (ns kollchap.handler
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
-            [kollchap.character :as c]
-            [kollchap.location :as l]
-            [kollchap.monster :as m]
+            [kollchap.character :as cr]
+            [kollchap.location :as ln]
+            [kollchap.monster :as mr]
             [kollchap.resources :as rs]
-            [kollchap.room :as r]
+            [kollchap.room :as rm]
             [schema.core :as s]))
 
 (defn middleware-add-self-link [handler]
@@ -30,39 +30,40 @@
                         :path-params [id :- Long]
                         :summary "character id path-parameter"
                         :middlewares [middleware-add-self-link]
-                        (ok {:character (c/get-character id)
+                        (ok {:character (cr/get-character id)
                              :_links    {:self {:href (-> req :self-link)}}}))
 
                   (POST* "/characters" {:as req}
-                         :body [character c/GameCharacter]
+                         :body [character cr/GameCharacter]
                          :return rs/CharacterResource
                          :summary "create new character resource from body"
                          :middlewares [middleware-add-self-link]
-                         (let [new-character (c/add! character)
+                         (let [new-character (cr/add! character)
                                new-resource-id (entity-to-resource (req :self-link) new-character)]
                            (created {:character new-character
                                      :_links    {:self     {:href new-resource-id},
                                                  :location {:href (str new-resource-id "/room")}}})))
 
-                  (GET* "/characters/:id/room" {:as req}
-                        :return rs/RoomResource
+                  (GET* "/characters/:id/location" {:as req}
+                        :return rs/LocationResource
                         :path-params [id :- Long]
                         :summary "character id path-parameter"
                         :middlewares [middleware-add-self-link]
-                        (let [location-room (l/get-character-location id)]
-                          (ok {:room   location-room
-                               :_links {:self {:href (str (req :base-link) "/rooms/" (location-room :key))}}})))
+                        (let [character-location (ln/get-character-location id)]
+                          (ok {:location character-location
+                               :_links   {:self {:href (str (req :base-link) "/rooms/" (character-location :room-key))}}})))
 
-                  (PUT* "/characters/:id/room" {:as req}
+                  (PUT* "/characters/:id/location" {:as req}
+                        :body [location ln/Location]
                         :path-params [id :- Long]
-                        :summary "character id path-parameter"
+                        :summary "character id path-parameter and room-key body"
                         :middlewares [middleware-add-self-link]
-                        (no-content))
+                        (ok))
 
                   (GET* "/rooms/:key" {:as req}
                         :return rs/RoomResource
                         :path-params [key :- String]
                         :summary "room key path-parameter"
                         :middlewares [middleware-add-self-link]
-                        (ok {:room   (r/get-room key)
+                        (ok {:room   (rm/get-room key)
                              :_links {:self {:href (str (req :self-link))}}}))))
