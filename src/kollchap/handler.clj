@@ -53,6 +53,12 @@
                           (ok {:room   location-room
                                :_links {:self {:href (str (req :base-link) "/rooms/" (location-room :key))}}})))
 
+                  (PUT* "/characters/:id/room" {:as req}
+                        :path-params [id :- Long]
+                        :summary "character id path-parameter"
+                        :middlewares [middleware-add-self-link]
+                        (no-content))
+
                   (GET* "/rooms/:key" {:as req}
                         :return rs/RoomResource
                         :path-params [key :- String]

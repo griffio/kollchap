@@ -61,4 +61,9 @@
   (fact "returns a room by key"
         (let [resp (request :get "/kollchap/rooms/1")]
           (:status resp) => 200
-          (get-in resp [:body :room]) => (r/get-room "1"))))
+          (get-in resp [:body :room]) => (r/get-room "1")))
+
+  (fact "update character location"
+        (let [resp (request :put "/kollchap/characters/1/room")]
+          (:status resp) => 204))
+  )
