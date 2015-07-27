@@ -58,6 +58,7 @@
                         :path-params [id :- Long]
                         :summary "character id path-parameter and room-key body"
                         :middlewares [middleware-add-self-link]
+                        (ln/set-character-location id location)
                         (ok))
 
                   (GET* "/rooms/:key" {:as req}
