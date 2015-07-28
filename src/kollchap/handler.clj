@@ -15,6 +15,13 @@
 
 (defn entity-to-resource [path entity] (str path "/" (entity :id)))
 
+(defn assoc-links-to-entity [entity links base-link]
+  (let [entity-id-base-link (str base-link "/" (entity :id))]
+    (assoc-in links [:_links :self :href] entity-id-base-link)))
+
+(defn list-entities [_entities _self-links _base-links]
+  (map (fn [_entity] (merge _entity (assoc-links-to-entity _entity _self-links _base-links))) _entities))
+
 (defapi app
         (swagger-ui)
         (swagger-docs
@@ -32,6 +39,11 @@
                         :middlewares [middleware-add-self-link]
                         (ok {:character (cr/get-character id)
                              :_links    {:self {:href (-> req :self-link)}}}))
+
+                  (GET* "/characters" {:as req}
+                        :summary "list all characters"
+                        :middlewares [middleware-add-self-link]
+                        (ok {:characters (list-entities (cr/get-characters) {:_links {:self {:href ""}}} (req :self-link))}))
 
                   (POST* "/characters" {:as req}
                          :body [character cr/GameCharacter]
