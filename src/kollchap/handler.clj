@@ -84,4 +84,17 @@
                         :summary "room key path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:room   (rm/get-room key)
-                             :_links {:self {:href (str (req :self-link))}}}))))
+                             :_links {:self {:href (str (req :self-link))}}}))
+
+                  (GET* "/monsters" {:as req}
+                        :summary "list all monsters"
+                        :middlewares [middleware-add-self-link]
+                        (ok {:monsters (list-entities (mr/get-monsters) {:_links {:self {:href ""}}} (req :self-link))}))
+
+                  (GET* "/monster/:id" {:as req}
+                        :return rs/MonsterResource
+                        :path-params [id :- Long]
+                        :summary "monster id path-parameter"
+                        :middlewares [middleware-add-self-link]
+                        (ok {:monster (mr/get-monster id)
+                             :_links    {:self {:href (-> req :self-link)}}}))))

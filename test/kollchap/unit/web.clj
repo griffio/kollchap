@@ -4,7 +4,8 @@
             [kollchap.room :as rm]
             [kollchap.location :as ln]
             [cheshire.core :as json]
-            [midje.sweet :refer :all])
+            [midje.sweet :refer :all]
+            [kollchap.monster :as mr])
   (:import [java.io ByteArrayInputStream InputStream]))
 
 (defn- json-response?
@@ -37,11 +38,24 @@
 
 (defn to-json [s] (json/generate-string s))
 ;;http --json POST localhost:3000/kollchap/characters id:=0 name='Wealthy Merchant' background='Locked in cells...'
-(def test-player-fixture {:id 0 :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
 (def test-location-fixture {:room-key "9a"})
+(def test-player-fixture {:id 0 :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
 
 (fact-group
   :unit
+
+  (fact "returns monsters"
+        (let [resp (request :get "/kollchap/monsters")]
+          (:status resp) => 200))
+
+  (fact "returns a monster"
+        (let [resp (request :get "/kollchap/monster/1")]
+          (:status resp) => 200
+          (get-in resp [:body :monster :name]) => (get (mr/get-monster 1) :name)))
+
+  (fact "returns characters"
+        (let [resp (request :get "/kollchap/characters")]
+          (:status resp) => 200))
 
   (fact "returns a player character"
         (let [resp (request :get "/kollchap/characters/1")]
