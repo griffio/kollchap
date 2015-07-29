@@ -9,18 +9,23 @@
             [schema.core :as s]))
 
 (defn middleware-add-self-link [handler]
+  "Adds a :base-link and :self-link to a handler request map"
   (fn add-base-link [{:keys [scheme server-name server-port uri] :as r}]
     (let [base-link (str (name scheme) "://" server-name ":" server-port) self-link (str base-link uri)]
       (handler (assoc r :base-link base-link :self-link self-link)))))
 
-(defn entity-to-resource [path entity] (str path "/" (entity :id)))
+(defn entity-to-resource [path entity]
+  "Returns a path/entity:id string"
+  (str path "/" (entity :id)))
 
-(defn assoc-links-to-entity [entity links base-link]
-  (let [entity-id-base-link (str base-link "/" (entity :id))]
-    (assoc-in links [:_links :self :href] entity-id-base-link)))
+(defn assoc-links-to-entity [entity link base-link]
+  "Provides the href value using the entity resource id"
+  (let [entity-id-base-link (entity-to-resource base-link entity)]
+    (assoc-in link [:_links :self :href] entity-id-base-link)))
 
-(defn list-entities [_entities _self-links _base-links]
-  (map (fn [_entity] (merge _entity (assoc-links-to-entity _entity _self-links _base-links))) _entities))
+(defn list-entities [entities self-link base-link]
+  "Associate each entity in the list with its self href resource '_links -> self -> href'"
+  (map (fn [entity] (merge entity (assoc-links-to-entity entity self-link base-link))) entities))
 
 (defapi app
         (swagger-ui)
