@@ -7,13 +7,13 @@
             [kollchap.location :as ln]))
 
 (s/defschema CharacterResource {:character cr/GameCharacter
-                                :_links    lk/Resource})
+                                :_links lk/CharacterLinks})
 
 (s/defschema LocationResource {:location ln/Location
-                               :_links   lk/Resource})
+                               :_links   lk/SelfLink})
 
 (s/defschema MonsterResource {:monster mr/Monster
-                              :_links   lk/Resource})
+                              :_links   lk/SelfLink})
 
 (s/defschema RoomResource {:room   rm/Room
-                           :_links lk/Resource})
+                           :_links lk/SelfLink})

@@ -43,7 +43,8 @@
                         :summary "character id path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:character (cr/get-character id)
-                             :_links    {:self {:href (-> req :self-link)}}}))
+                             :_links    {:self {:href (-> req :self-link)}
+                                        :location {:href (str (-> req :self-link) "/location")}}}))
 
                   (GET* "/characters" {:as req}
                         :summary "list all characters"
@@ -58,7 +59,7 @@
                          (let [new-character (cr/add! character)
                                new-resource-id (entity-to-resource (req :self-link) new-character)]
                            (created {:character new-character
-                                     :_links    {:self     {:href new-resource-id},
+                                     :_links    {:self     {:href new-resource-id}
                                                  :location {:href (str new-resource-id "/room")}}})))
 
                   (GET* "/characters/:id/location" {:as req}

@@ -4,4 +4,10 @@
 
 (s/defschema Link {:href s/Str})
 
-(s/defschema Resource {:self Link})
+(s/defschema SelfLink {:self Link})
+
+(s/defschema LocationLink {:location Link})
+
+(s/defschema CharacterLinks {:self Link :location Link})
+
+(s/defschema MonsterLinks {:self Link :location Link})
