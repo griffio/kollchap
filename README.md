@@ -8,6 +8,15 @@ Aiming to make it Restful hypermedia with resource links
 
 ## Usage
 
+### REPL
+
+`lein repl`
+
+```
+(use 'midje.repl)
+(autotest)
+```
+
 ### Running
 
 `lein ring server`
