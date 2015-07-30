@@ -98,4 +98,5 @@
                         :summary "monster id path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:monster (mr/get-monster id)
-                             :_links    {:self {:href (-> req :self-link)}}}))))
+                             :_links    {:self {:href (-> req :self-link)}
+                                         :location {:href (str (-> req :self-link) "/location")}}}))))

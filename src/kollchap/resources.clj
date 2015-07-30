@@ -13,7 +13,7 @@
                                :_links   lk/SelfLink})
 
 (s/defschema MonsterResource {:monster mr/Monster
-                              :_links   lk/SelfLink})
+                              :_links   lk/MonsterLinks})
 
 (s/defschema RoomResource {:room   rm/Room
                            :_links lk/SelfLink})
