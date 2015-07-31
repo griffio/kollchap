@@ -18,14 +18,14 @@
   "Returns a path/entity:id string"
   (str path "/" (entity :id)))
 
-(defn assoc-links-to-entity [entity link base-link]
+(defn assoc-links-to-entity [entity links-self-href]
   "Provides the href value using the entity resource id"
-  (let [entity-id-base-link (entity-to-resource base-link entity)]
-    (assoc-in link [:_links :self :href] entity-id-base-link)))
+  (let [entity-id-base-link (entity-to-resource (get-in links-self-href[:_links :self :href]) entity)]
+    (assoc-in links-self-href[:_links :self :href] entity-id-base-link)))
 
-(defn list-entities [entities self-link base-link]
+(defn list-entities [entities links-self-href]
   "Associate each entity in the list with its self href resource '_links -> self -> href'"
-  (map (fn [entity] (merge entity (assoc-links-to-entity entity self-link base-link))) entities))
+  (map (fn [entity] (merge entity (assoc-links-to-entity entity links-self-href))) entities))
 
 (defapi app
         (swagger-ui)
@@ -49,7 +49,8 @@
                   (GET* "/characters" {:as req}
                         :summary "list all characters"
                         :middlewares [middleware-add-self-link]
-                        (ok {:characters (list-entities (cr/get-characters) {:_links {:self {:href ""}}} (req :self-link))}))
+                        (ok {:characters (list-entities (cr/get-characters) {:_links {:self {:href (req :self-link)}
+                                                                                      :location {:href "/location"}}})}))
 
                   (POST* "/characters" {:as req}
                          :body [character cr/GameCharacter]
@@ -90,7 +91,8 @@
                   (GET* "/monsters" {:as req}
                         :summary "list all monsters"
                         :middlewares [middleware-add-self-link]
-                        (ok {:monsters (list-entities (mr/get-monsters) {:_links {:self {:href ""}}} (req :self-link))}))
+                        (ok {:monsters (list-entities (mr/get-monsters) {:_links {:self {:href (req :self-link)}
+                                                                                  :location {:href "/location"}}})}))
 
                   (GET* "/monster/:id" {:as req}
                         :return rs/MonsterResource
