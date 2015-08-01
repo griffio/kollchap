@@ -83,5 +83,4 @@
         (let [resp (request :put "/kollchap/characters/1/location"
                             :content-type "application/json"
                             :body test-location-fixture)]
-          (:status resp) => 200))
-  )
+          (:status resp) => 200)))

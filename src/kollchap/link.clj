@@ -8,6 +8,8 @@
 
 (s/defschema LocationLink {:location Link})
 
+(s/defschema RoomLink {:self Link :room Link})
+
 (s/defschema CharacterLinks {:self Link :location Link})
 
 (s/defschema MonsterLinks {:self Link :location Link})

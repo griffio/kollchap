@@ -10,7 +10,7 @@
                                 :_links lk/CharacterLinks})
 
 (s/defschema LocationResource {:location ln/Location
-                               :_links   lk/SelfLink})
+                               :_links   lk/RoomLink})
 
 (s/defschema MonsterResource {:monster mr/Monster
                               :_links   lk/MonsterLinks})
