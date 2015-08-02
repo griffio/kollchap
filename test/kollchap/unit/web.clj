@@ -45,42 +45,46 @@
   :unit
 
   (fact "returns monsters"
-        (let [resp (request :get "/kollchap/monsters")]
-          (:status resp) => 200))
+        (let [uri "/kollchap/monsters" resp (request :get uri)]
+          (:status resp) => 200
+          (get-in resp [:body :_links :self :href]) => (contains uri)))
 
   (fact "returns a monster"
-        (let [resp (request :get "/kollchap/monster/1")]
+        (let [uri "/kollchap/monster/1" resp (request :get uri)]
           (:status resp) => 200
+          (get-in resp [:body :_links :self :href]) => (contains uri)
           (get-in resp [:body :monster :name]) => (get (mr/get-monster 1) :name)))
 
   (fact "returns characters"
-        (let [resp (request :get "/kollchap/characters")]
-          (:status resp) => 200))
+        (let [uri "/kollchap/characters" resp (request :get uri)]
+          (:status resp) => 200
+          (get-in resp [:body :_links :self :href]) => (contains uri)))
 
   (fact "returns a player character"
-        (let [resp (request :get "/kollchap/characters/1")]
+        (let [uri "/kollchap/characters/1" resp (request :get uri)]
           (:status resp) => 200
+          (get-in resp [:body :_links :self :href]) => (contains "/kollchap/characters/1")
           (get-in resp [:body :character]) => (cr/get-character 1)))
 
   (fact "create a game character"
-        (let [resp (request :post "/kollchap/characters"
-                            :content-type "application/json"
-                            :body test-player-fixture)]
+        (let [uri "/kollchap/characters"
+              resp (request :post uri :body test-player-fixture :content-type "application/json")]
           (:status resp) => 201
           (get-in resp [:body :character :name]) => (test-player-fixture :name)))
 
   (fact "returns a character's location"
-        (let [resp (request :get "/kollchap/characters/6/location")]
+        (let [uri "/kollchap/characters/6/location" resp (request :get uri)]
           (:status resp) => 200
+          (get-in resp [:body :_links :self :href]) => (contains uri)
           (get-in resp [:body :location]) => (ln/get-character-location 6)))
 
   (fact "returns a room by key"
-        (let [resp (request :get "/kollchap/rooms/1")]
+        (let [uri "/kollchap/rooms/1" resp (request :get uri)]
           (:status resp) => 200
+          (get-in resp [:body :_links :self :href]) => (contains uri)
           (get-in resp [:body :room]) => (rm/get-room "1")))
 
   (fact "update character location"
-        (let [resp (request :put "/kollchap/characters/1/location"
-                            :content-type "application/json"
-                            :body test-location-fixture)]
+        (let [uri "/kollchap/characters/1/location"
+              resp (request :put uri :body test-location-fixture :content-type "application/json")]
           (:status resp) => 200)))
