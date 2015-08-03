@@ -63,7 +63,7 @@
   (fact "returns a player character"
         (let [uri "/kollchap/characters/1" resp (request :get uri)]
           (:status resp) => 200
-          (get-in resp [:body :_links :self :href]) => (contains "/kollchap/characters/1")
+          (get-in resp [:body :_links :self :href]) => (contains uri)
           (get-in resp [:body :character]) => (cr/get-character 1)))
 
   (fact "create a game character"
