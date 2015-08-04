@@ -38,14 +38,22 @@
         (context* "/kollchap" []
                   :tags ["kollchap"]
 
+                  (GET* "/" {:as req}
+                        :return rs/KollchapResource
+                        :middlewares [middleware-add-self-link]
+                        :summary "api resources"
+                        (ok {:characters {:href (str (req :self-link) "/location")}
+                             :monsters {:href (str (req :self-link) "/monsters")}
+                             :rooms {:href (str (req :self-link) "/rooms")}}))
+
                   (GET* "/characters/:id" {:as req}
                         :return rs/CharacterResource
                         :path-params [id :- Long]
                         :summary "character id path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:character (cr/get-character id)
-                             :_links    {:self     {:href (-> req :self-link)}
-                                         :location {:href (str (-> req :self-link) "/location")}}}))
+                             :_links    {:self     {:href (req :self-link)}
+                                         :location {:href (str (req :self-link) "/location")}}}))
 
                   (GET* "/characters" {:as req}
                         :summary "list all characters"

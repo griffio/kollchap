@@ -44,6 +44,10 @@
 (fact-group
   :unit
 
+  (fact "returns api resources"
+        (let [uri "/kollchap" resp (request :get uri)]
+          (:status resp) => 200))
+
   (fact "returns monsters"
         (let [uri "/kollchap/monsters" resp (request :get uri)]
           (:status resp) => 200
