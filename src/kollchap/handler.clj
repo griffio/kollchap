@@ -42,9 +42,9 @@
                         :return rs/KollchapResource
                         :middlewares [middleware-add-self-link]
                         :summary "api resources"
-                        (ok {:characters {:href (str (req :self-link) "/location")}
-                             :monsters {:href (str (req :self-link) "/monsters")}
-                             :rooms {:href (str (req :self-link) "/rooms")}}))
+                        (ok {:characters {:href (str (:self-link req) "/location")}
+                             :monsters {:href (str (:self-link req) "/monsters")}
+                             :rooms {:href (str (:self-link req) "/rooms")}}))
 
                   (GET* "/characters/:id" {:as req}
                         :return rs/CharacterResource
@@ -52,15 +52,15 @@
                         :summary "character id path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:character (cr/get-character id)
-                             :_links    {:self     {:href (req :self-link)}
-                                         :location {:href (str (req :self-link) "/location")}}}))
+                             :_links    {:self     {:href (:self-link req)}
+                                         :location {:href (str (:self-link req) "/location")}}}))
 
                   (GET* "/characters" {:as req}
                         :summary "list all characters"
                         :middlewares [middleware-add-self-link]
-                        (ok {:characters (list-entities (cr/get-characters) {:_links {:self     {:href (req :self-link)}
+                        (ok {:characters (list-entities (cr/get-characters) {:_links {:self     {:href (:self-link req)}
                                                                                       :location {:href "/location"}}})
-                             :_links     {:self {:href (req :self-link)}}}))
+                             :_links     {:self {:href (:self-link req)}}}))
 
                   (POST* "/characters" {:as req}
                          :body [character cr/GameCharacter]
@@ -68,7 +68,7 @@
                          :summary "create new character resource from body"
                          :middlewares [middleware-add-self-link]
                          (let [new-character (cr/add! character)
-                               new-resource-link (entity-to-resource (req :self-link) new-character)]
+                               new-resource-link (entity-to-resource (:self-link req) new-character)]
                            (created {:character new-character
                                      :_links    {:self     {:href new-resource-link}
                                                  :location {:href (str new-resource-link "/location")}}})))
@@ -80,8 +80,8 @@
                         :middlewares [middleware-add-self-link]
                         (let [character-location (ln/get-character-location id)]
                           (ok {:location character-location
-                               :_links   {:self {:href (req :self-link)}
-                                          :room {:href (str (req :base-link) "/rooms/" (character-location :room-key))}}})))
+                               :_links   {:self {:href (:self-link req)}
+                                          :room {:href (str (:base-link req) "/rooms/" (character-location :room-key))}}})))
 
                   (PUT* "/characters/:id/location" {:as req}
                         :body [location ln/Location]
@@ -97,14 +97,14 @@
                         :summary "room key path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:room   (rm/get-room key)
-                             :_links {:self {:href (str (req :self-link))}}}))
+                             :_links {:self {:href (:self-link req)}}}))
 
                   (GET* "/monsters" {:as req}
                         :summary "list all monsters"
                         :middlewares [middleware-add-self-link]
-                        (ok {:monsters (list-entities (mr/get-monsters) {:_links {:self     {:href (req :self-link)}
+                        (ok {:monsters (list-entities (mr/get-monsters) {:_links {:self     {:href (:self-link req)}
                                                                                   :location {:href "/location"}}})
-                             :_links   {:self {:href (str (req :self-link))}}}))
+                             :_links   {:self {:href (:self-link req)}}}))
 
                   (GET* "/monster/:id" {:as req}
                         :return rs/MonsterResource
@@ -112,8 +112,8 @@
                         :summary "monster id path-parameter"
                         :middlewares [middleware-add-self-link]
                         (ok {:monster (mr/get-monster id)
-                             :_links  {:self     {:href (req :self-link)}
-                                       :location {:href (str (req :self-link) "/location")}}}))
+                             :_links  {:self     {:href (:self-link req)}
+                                       :location {:href (str (:self-link req) "/location")}}}))
 
                   (GET* "/monster/:id/location" {:as req}
                         :return rs/LocationResource
@@ -122,5 +122,5 @@
                         :middlewares [middleware-add-self-link]
                         (let [monster-location (ln/get-monster-location id)]
                           (ok {:location monster-location
-                               :_links   {:self {:href (req :self-link)}
-                                          :room {:href (str (req :base-link) "/rooms/" (monster-location :room-key))}}})))))
+                               :_links   {:self {:href (:self-link req)}
+                                          :room {:href (str (:base-link req) "/rooms/" (monster-location :room-key))}}})))))
