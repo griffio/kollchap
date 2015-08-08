@@ -14,13 +14,14 @@
   :profiles {:uberjar {:resource-paths ["swagger-ui"]
                        :aot :all}
              :dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                                  [midje "1.6.3"]]
+                                  [midje "1.6.3"]
+                                  [hiccup "1.0.5"]]
                    :plugins [[lein-ring "0.9.4"]
                              [lein-cljsbuild "1.0.3"]]
                    :cljsbuild {
                       :builds [{
                         :source-paths ["src-cljs"]
                         :compiler {
-                        :output-to "resources/public/main.js"
+                        :output-to "resources/public/js/main.js"
                         :optimizations :whitespace
                         :pretty-print true}}]}}})

@@ -1,6 +1,7 @@
 (ns kollchap.handler
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
+            [kollchap.client :as ct]
             [kollchap.character :as cr]
             [kollchap.location :as ln]
             [kollchap.monster :as mr]
@@ -37,6 +38,10 @@
 
         (context* "/kollchap" []
                   :tags ["kollchap"]
+
+                  (GET* "/index.html" []
+                        :no-doc true 
+                        (ok(ct/index-page)))
 
                   (GET* "/" {:as req}
                         :return rs/KollchapResource
