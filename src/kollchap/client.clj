@@ -9,6 +9,6 @@
   (html5
    [:head
     [:title "Hello Kollchap"]
-    (include-js "main.js")]
+    (include-js "/js/main.js")]
    [:body
     [:h1 "Hello Kollchap"]]))
