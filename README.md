@@ -19,7 +19,12 @@ Aiming to make it Restful hypermedia with resource links
 
 ### Running
 
-`lein ring server`
+```
+lein cljsbuild once
+
+lein ring server
+
+```
 
 ### Packaging and running as standalone jar
 
