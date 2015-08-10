@@ -2,3 +2,5 @@
 
 (defn ^:export init []
   (js/alert "Hello Kollchap"))
+
+(init)

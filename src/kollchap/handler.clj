@@ -1,6 +1,7 @@
 (ns kollchap.handler
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
+            [compojure.api.middleware :refer [public-resources]]
             [kollchap.client :as ct]
             [kollchap.character :as cr]
             [kollchap.location :as ln]
@@ -30,6 +31,7 @@
   (map (fn [entity] (merge entity (assoc-links-to-entity entity links-self-href))) entities))
 
 (defapi app
+        (middlewares [public-resources])
         (swagger-ui)
         (swagger-docs
           {:info {:title       "The Shrine of Kollchap Api"
