@@ -6,6 +6,8 @@
                  [org.clojure/tools.logging "0.3.1"]
                  [org.clojure/clojurescript "0.0-2371"]
                  [ch.qos.logback/logback-classic "1.1.3"]
+                 [cljs-http "0.1.36"]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [lein-light-nrepl "0.1.0"]]
   :repl-options {:nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
   :ring {:handler kollchap.handler/app}
