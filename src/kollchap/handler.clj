@@ -1,5 +1,6 @@
 (ns kollchap.handler
-  (:require [compojure.api.sweet :refer :all]
+  (:require [qbits.jet.server :refer [run-jetty]]
+            [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [compojure.api.middleware :refer [public-resources]]
             [kollchap.client :as ct]
@@ -131,3 +132,6 @@
                           (ok {:location monster-location
                                :_links   {:self {:href (:self-link req)}
                                           :room {:href (str (:base-link req) "/rooms/" (monster-location :room-key))}}})))))
+
+(defn -main [& args]
+  (run-jetty {:ring-handler app :port 8080}))
