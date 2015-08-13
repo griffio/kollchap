@@ -59,11 +59,11 @@
           (get-in resp [:body :_links :self :href]) => (contains uri)
           (get-in resp [:body :monster :name]) => (get (mr/get-monster 1) :name)))
 
-  (fact "returns characters"
+  (fact "returns characters and confirms self link and the correct count"
         (let [uri "/kollchap/characters" resp (request :get uri)]
           (:status resp) => 200
           (get-in resp [:body :_links :self :href]) => (contains uri)
-          (get-in resp [:body :characters])))
+          (count (get-in resp [:body :characters])) => (count (cr/get-characters))))
 
   (fact "returns a player character"
         (let [uri "/kollchap/characters/1" resp (request :get uri)]
