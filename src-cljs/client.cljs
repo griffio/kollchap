@@ -45,12 +45,12 @@
   (set! (.-innerHTML el) content))
 
 (defn render-results [json-results]
-  (let [results (transit/read json-r json-results)]
-    (println results)
+  (let [results (transit/read json-r json-results) characters (results "characters")]
+    (println characters)
     (reduce
       (fn [acc result]
         (str acc "<li>" result "</li>"))
-      "" (second results))))
+      "" (first characters))))
 
 (defn listen [el type]
   (let [out (chan)]
