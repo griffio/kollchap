@@ -10,5 +10,7 @@
      [:title "Hello Kollchap"]]
     [:body
      [:h1 "Hello Kollchap"]
-     [:div {:id "kollchap"}]
+     [:section {:id "kollchap"}]
+     [:h2 "Characters"]
+     [:section {:id "characters"}]
      (include-js "/js/main.js")]))
