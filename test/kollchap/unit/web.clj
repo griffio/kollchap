@@ -39,7 +39,7 @@
 (defn to-json [s] (json/generate-string s))
 ;;http --json POST localhost:3000/kollchap/characters id:=0 name='Wealthy Merchant' background='Locked in cells...'
 (def test-location-fixture {:room-key "9a"})
-(def test-player-fixture {:id 0 :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
+(def test-player-fixture {:id "1c55243b-33f0-43e1-8542-e4a8f0a3ef3e" :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
 
 (fact-group
   :unit
@@ -66,10 +66,10 @@
           (count (get-in resp [:body :characters])) => (count (cr/get-characters))))
 
   (fact "returns a player character"
-        (let [uri "/kollchap/characters/1" resp (request :get uri)]
+        (let [uri "/kollchap/characters/16abb36f-c1fd-4cc5-99c1-2261fd69d4e3" resp (request :get uri)]
           (:status resp) => 200
           (get-in resp [:body :_links :self :href]) => (contains uri)
-          (get-in resp [:body :character]) => (cr/get-character 1)))
+          (get-in resp [:body :character]) => (cr/get-character "16abb36f-c1fd-4cc5-99c1-2261fd69d4e3")))
 
   (fact "create a game character"
         (let [uri "/kollchap/characters"
@@ -78,10 +78,10 @@
           (get-in resp [:body :character :name]) => (test-player-fixture :name)))
 
   (fact "returns a character's location"
-        (let [uri "/kollchap/characters/6/location" resp (request :get uri)]
+        (let [uri "/kollchap/characters/34e23d2c-7a03-48ec-b69c-59e658fcbd09/location" resp (request :get uri)]
           (:status resp) => 200
           (get-in resp [:body :_links :self :href]) => (contains uri)
-          (get-in resp [:body :location]) => (ln/get-character-location 6)))
+          (get-in resp [:body :location]) => (ln/get-character-location "34e23d2c-7a03-48ec-b69c-59e658fcbd09")))
 
   (fact "returns a room by key"
         (let [uri "/kollchap/rooms/1" resp (request :get uri)]
@@ -90,6 +90,6 @@
           (get-in resp [:body :room]) => (rm/get-room "1")))
 
   (fact "update character location"
-        (let [uri "/kollchap/characters/1/location"
+        (let [uri "/kollchap/characters/16abb36f-c1fd-4cc5-99c1-2261fd69d4e3/location"
               resp (request :put uri :body test-location-fixture :content-type "application/json")]
           (:status resp) => 200)))
