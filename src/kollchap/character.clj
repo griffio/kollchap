@@ -3,10 +3,10 @@
             [ring.swagger.schema :refer [coerce!]]))
 
 ;; Domain
-(s/defschema GameCharacter {:id                        Long
-                            :name                      String
-                            :background                String
-                            (s/optional-key :room-key) String})
+(def GameCharacter {:id                        s/Int
+                    :name                      s/Str
+                    :background                s/Str
+                    (s/optional-key :room-key) s/Str})
 ;; Repository
 (defonce id-seq (atom 0))
 (defonce characters (atom (array-map)))

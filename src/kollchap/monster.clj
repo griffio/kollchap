@@ -5,11 +5,11 @@
 ;; Domain
 (def Alignment (s/enum :chaotic :neutral :lawful))
 
-(s/defschema Monster {:id        Long
-                      :name      String
-                      :alignment Alignment
-                      :count     Long
-                      :room-key  String})
+(def Monster {:id        s/Int
+              :name      s/Str
+              :alignment Alignment
+              :count     s/Int
+              :room-key  s/Str})
 ;; Repository
 (defonce id-seq (atom 0))
 (defonce monsters (atom (array-map)))

@@ -2,9 +2,9 @@
   (:require [schema.core :as s]
             [ring.swagger.schema :refer [coerce!]]))
 ;; Domain
-(s/defschema Room {:key         String
-                   :name        String
-                   :description String})
+(def Room {:key         s/Str
+           :name        s/Str
+           :description s/Str})
 ;; Repository
 (defonce rooms (atom (array-map)))
 

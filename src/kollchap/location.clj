@@ -4,7 +4,7 @@
             [schema.core :as s]
             [ring.swagger.schema :refer [coerce!]]))
 ; Domain
-(s/defschema Location {:room-key String})
+(def Location {:room-key s/Str})
 
 (defn- get-location [fn-get-entity, entity-id]
   (let [located-character (fn-get-entity entity-id) located-room-key (located-character :room-key)]
