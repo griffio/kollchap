@@ -57,7 +57,7 @@
 
                     (GET* "/characters/:id" {:as req}
                           :return rs/CharacterResource
-                          :path-params [id :- s/Str]
+                          :path-params [id :- String]
                           :summary "character id path-parameter"
                           :middlewares [middleware-add-self-link]
                           (ok {:character (cr/get-character id)
@@ -84,7 +84,7 @@
 
                     (GET* "/characters/:id/location" {:as req}
                           :return rs/LocationResource
-                          :path-params [id :- s/Uuid]
+                          :path-params [id :- String]
                           :summary "character id path-parameter"
                           :middlewares [middleware-add-self-link]
                           (let [character-location (ln/get-character-location id)]
@@ -94,7 +94,7 @@
 
                     (PUT* "/characters/:id/location" {:as req}
                           :body [location ln/Location]
-                          :path-params [id :- s/Str]
+                          :path-params [id :- String]
                           :summary "character id path-parameter and room-key body"
                           :middlewares [middleware-add-self-link]
                           (ln/set-character-location id location)
