@@ -5,6 +5,7 @@
             [kollchap.location :as ln]
             [cheshire.core :as json]
             [midje.sweet :refer :all]
+            [ring.swagger.schema :refer [coerce!]]
             [kollchap.monster :as mr])
   (:import [java.io ByteArrayInputStream InputStream]))
 
@@ -39,7 +40,7 @@
 (defn to-json [s] (json/generate-string s))
 ;;http --json POST localhost:3000/kollchap/characters id:=0 name='Wealthy Merchant' background='Locked in cells...'
 (def test-location-fixture {:room-key "9a"})
-(def test-player-fixture {:id "1c55243b-33f0-43e1-8542-e4a8f0a3ef3e" :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
+(def test-player-fixture {:uuid "1c55243b-33f0-43e1-8542-e4a8f0a3ef3e" :name "Wealthy Merchant" :background "Locked in cells..." :room-key "13"})
 
 (fact-group
   :unit
@@ -54,10 +55,10 @@
           (get-in resp [:body :_links :self :href]) => (contains uri)))
 
   (fact "returns a monster"
-        (let [uri "/kollchap/monster/1" resp (request :get uri)]
+        (let [uri "/kollchap/monster/aa9d8dbc-592d-4017-b55d-63ce49f73c5e" resp (request :get uri)]
           (:status resp) => 200
           (get-in resp [:body :_links :self :href]) => (contains uri)
-          (get-in resp [:body :monster :name]) => (get (mr/get-monster 1) :name)))
+          (get-in resp [:body :monster :name]) => (get (mr/get-monster "aa9d8dbc-592d-4017-b55d-63ce49f73c5e") :name)))
 
   (fact "returns characters and confirms self link and the correct count"
         (let [uri "/kollchap/characters" resp (request :get uri)]
@@ -69,13 +70,13 @@
         (let [uri "/kollchap/characters/16abb36f-c1fd-4cc5-99c1-2261fd69d4e3" resp (request :get uri)]
           (:status resp) => 200
           (get-in resp [:body :_links :self :href]) => (contains uri)
-          (get-in resp [:body :character]) => (cr/get-character "16abb36f-c1fd-4cc5-99c1-2261fd69d4e3")))
+          (get-in resp [:body :character :name]) => (get (cr/get-character "16abb36f-c1fd-4cc5-99c1-2261fd69d4e3") :name)))
 
   (fact "create a game character"
         (let [uri "/kollchap/characters"
               resp (request :post uri :body test-player-fixture :content-type "application/json")]
           (:status resp) => 201
-          (get-in resp [:body :character :name]) => (test-player-fixture :name)))
+          (get-in resp [:body :character :name]) => (:name test-player-fixture)))
 
   (fact "returns a character's location"
         (let [uri "/kollchap/characters/34e23d2c-7a03-48ec-b69c-59e658fcbd09/location" resp (request :get uri)]

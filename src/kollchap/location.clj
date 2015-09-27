@@ -6,16 +6,16 @@
 ; Domain
 (def Location {:room-key s/Str})
 
-(defn- get-location [fn-get-entity, entity-id]
-  (let [located-character (fn-get-entity entity-id) located-room-key (located-character :room-key)]
+(defn- get-location [fn-get-entity, entity-uuid]
+  (let [located-character (fn-get-entity entity-uuid) located-room-key (located-character :room-key)]
     (coerce! Location {:room-key located-room-key})))
 
-(defn get-character-location [character-id]
-  (get-location cr/get-character character-id))
+(defn get-character-location [character-uuid]
+  (get-location cr/get-character character-uuid))
 
-(defn get-monster-location [monster-id]
-  (get-location mr/get-monster monster-id))
+(defn get-monster-location [monster-uuid]
+  (get-location mr/get-monster monster-uuid))
 
-(defn set-character-location [character-id, location]
-  (let [character (cr/get-character character-id) updated-character (merge character location)]
+(defn set-character-location [character-uuid, location]
+  (let [character (cr/get-character character-uuid) updated-character (merge character location)]
     (cr/update! updated-character)))

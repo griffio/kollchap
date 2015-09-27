@@ -1,6 +1,5 @@
 (ns kollchap.link
-  (:require [schema.core :as s]
-            [ring.swagger.schema :refer [coerce!]]))
+  (:require [schema.core :as s]))
 
 (def Link {:href s/Str})
 
@@ -13,4 +12,3 @@
 (def CharacterLink {:self Link :location Link})
 
 (def MonsterLink {:self Link :location Link})
-
