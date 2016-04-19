@@ -15,3 +15,5 @@ dc-sdk.log
 .lein-repl-history
 *.iml
 resources/public/js/main.js
+figwheel_server.log
+resources/public/js/out
