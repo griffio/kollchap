@@ -1,4 +1,4 @@
-(ns kollchap.client
+(ns hello-kollchap.client
   (:require-macros [secretary.core :refer [defroute]]
                    [cljs.core.async.macros :refer [go]])
   (:require [goog.events :as events]
@@ -53,14 +53,14 @@
 (defn home-html [link-results]
   (str "<ul id=\"js-links\">"
        (render-links link-results)
-       "</ul>"))
+       "</ul>")
 
   (def characters-url "/kollchap/characters")
   (def characters-html
     "<button id=\"js-findButton\">Find</button><ul id=\"js-characters\"></ul>")
 
   (defn set-html! [el content]
-    (set! (.-innerHTML el) content))
+    (set! (.-innerHTML el) content)))
 
 (defn listen [el type]
   (let [out (chan)]
@@ -76,8 +76,8 @@
     out))
 
 (defroute home-path "/" []
-          (go (let [link-results (<! (get-data links-url))]
-              (set-html! el-app (home-html link-results))))
+          (go (let [link-results (<! (get-data links-url))])
+              (set-html! el-app (home-html link-results)))
           (set-html! el-characters characters-html)
           (let [clicks (listen (dom/getElement "js-findButton") "click")]
             (go (while true

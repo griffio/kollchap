@@ -89,5 +89,5 @@
          :description "This room was originally a meditation room..."})
   (add! {:key         "23"
          :name        "Flooded Storeroom"
-         :description "The stairs leading down are wet and so anyone going down them..."})
-  )
+         :description "The stairs leading down are wet and so anyone going down them..."}))
+
