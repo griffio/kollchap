@@ -5,7 +5,7 @@
 Example project for using [Compojure-api](https://github.com/metosin/compojure-api).
 
 ~~~
-[metosin/compojure-api "1.1.3"]
+[metosin/compojure-api "1.1.4"]
 ~~~
 
 Aiming to make it Restful hypermedia with resource links
